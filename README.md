@@ -13,8 +13,8 @@ This project is a NestJS-based API for managing events and users. It includes CR
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Jiayi079/nestjs-task-manager.git
-cd nestjs-task-manager
+git clone https://github.com/peter6286/Ra-lab-master.git
+cd RA-LAB-MASTER
 ```
 
 ### 2. Install Dependencies
@@ -36,8 +36,8 @@ TypeOrmModule.forRoot({
   type: 'mysql',
   host: 'localhost',
   port: 3306,
-  username: 'root',
-  password: 'root123',
+  username: <Your user name>,
+  password: <Your password>,
   database: 'nestjs_project',
   entities: [Event, User],
   synchronize: true, // Be cautious with synchronize in production!
