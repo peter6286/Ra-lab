@@ -40,7 +40,7 @@ TypeOrmModule.forRoot({
   password: <Your password>,
   database: 'nestjs_project',
   entities: [Event, User],
-  synchronize: true, // Be cautious with synchronize in production!
+  synchronize: true,
 }),
 ```
 
@@ -75,73 +75,132 @@ To run the automated tests and ensure everything works as expected:
 npm test
 ```
 
-### 2. Explanation of Tests
-The tests are written in Jest and cover the following key functionalities of the application:
+## **API Endpoints**
 
-- **UserService Tests**:
-  - Ensures that `UserService` is properly defined.
-  - Tests that a new user can be created using `createUser` and that the returned user data matches expectations.
-  - Verifies that all users can be retrieved using `findAll`.
-
-- **EventService Tests**:
-  - Confirms that `EventService` is properly defined.
-  - Tests the creation of a new event to ensure it is saved to the database and that the returned event data is accurate.
-  - Verifies that an event can be retrieved by ID, including related invitees.
-  - Confirms that an event can be deleted by ID.
-  - Tests that when creating an event with invitees, corresponding records are automatically generated in the `event_invitees_user` table, correctly linking invitees to the event.
-  - Checks the `mergeAllOverlappingEvents` function to ensure that overlapping events for a user are identified, merged, and correctly saved, with invitees consolidated from the overlapping events.
-
-- **UserController Tests**:
-  - Ensures that `UserController` is properly defined.
-  - Tests that `createUser` in `UserController` successfully calls `UserService` to create a new user.
-  - Verifies that all users can be retrieved through `getAllUsers`.
-
-- **EventController Tests**:
-  - Confirms that `EventController` is properly defined.
-  - Tests the creation of a new event using `createEvent`.
-  - Ensures that an event can be retrieved by ID using `getEvent`.
-  - Tests retrieving all events with `getAllEvents`.
-  - Verifies that an event can be deleted by ID using `deleteEvent`.
-
-These tests ensure that core functionalities—CRUD operations for users and events, invitee management, and merging overlapping events—are functioning as expected. Run these tests with `npm test` to validate the application’s behavior.
-
-
-
-## API Endpoints
 The main endpoints of the API are as follows:
 
-- User Endpoints:
+### **User Endpoints:**
 
-  - `POST /users`: Create a new user.
-  - `GET /users`: Retrieve all users.
+- **`POST /users`**: Create a new user.
+- **`GET /users`**: Retrieve all users.
+- **`DELETE /users/:id`**: Delete a user by ID.
 
+---
 
-- Event Endpoints:
+### **Event Endpoints:**
 
-  - `POST /events`: Create a new event.
-  - `GET /events/:id`: Retrieve an event by ID.
-  - `GET /events`: Retrieve all events.
-  - `PATCH /events/:id`: Update an event by ID.
-  - `DELETE /events/:id`: Delete an event by ID.
-  - `GET /events/merge/:userId`: Merge all overlapping events for a user (merges overlapping time intervals).
+- **`POST /events`**: Create a new event.
+- **`GET /events/:id`**: Retrieve an event by ID.
+- **`GET /events`**: Retrieve all events.
+- **`PATCH /events/:id`**: Update an event by ID.
+- **`DELETE /events/:id`**: Delete an event by ID.
+- **`GET /events/merge/:userId`**: Merge all overlapping events for a user (merges overlapping time intervals).
 
-Use a tool like `Postman` or `curl` to test the endpoints manually.
+---
 
-## Project Structure
-- **src/**: Main source code for the API.
-  - **src/event/**: Contains code related to event management:
-    - **event.entity.ts**: Defines the Event entity schema.
-    - **event.service.ts**: Provides business logic for events, including CRUD and merge operations.
-    - **event.controller.ts**: Handles incoming requests related to events and routes them to the service.
-    - **event.controller.spec.ts** and **event.service.spec.ts**: Automated test cases for the Event controller and service.
-  - **src/user/**: Contains code related to user management:
-    - **user.entity.ts**: Defines the User entity schema.
-    - **user.service.ts**: Provides business logic for user management.
-    - **user.controller.ts**: Handles incoming requests related to users and routes them to the service.
-    - **user.controller.spec.ts** and **user.service.spec.ts**: Automated test cases for the User controller and service.
-  - **app.controller.ts** and **app.service.ts**: Contains additional logic for the root application.
-  - **app.module.ts**: Root module that sets up the application, including TypeORM configuration.
-  - **main.ts**: Entry point of the application, which bootstraps the NestJS server.
-  
-- **test/**: (Currently unused) Placeholder for separate test-related files if needed in the future.
+### **Testing the Endpoints**
+
+Use a tool like `Postman` to test the endpoints manually.
+
+## Test case cover
+
+### **1. User Module**
+
+The `User` module manages operations related to users, such as creation, retrieval, and deletion.
+
+#### **1.1 UserController**
+
+**Methods Covered:**
+
+- **`createUser`:**
+  - Verifies that a user can be created successfully.
+  - Ensures `UserService.create` is called with the correct data.
+  - Validates the response matches the created user.
+
+- **`getAllUsers`:**
+  - Verifies that all users are retrieved successfully.
+  - Ensures `UserService.findAll` is called.
+  - Validates the response matches the list of users.
+
+---
+
+#### **1.2 UserService**
+
+**Methods Covered:**
+
+- **`create`:**
+  - Verifies that a new user is created and saved successfully in the database.
+  - Mocks `userRepository.save` to validate the correct save behavior.
+
+- **`findAll`:**
+  - Verifies that all users are retrieved from the database.
+  - Mocks `userRepository.find` to validate the correct retrieval behavior.
+
+---
+
+### **2. Event Module**
+
+The `Event` module manages event-related operations, such as creation, updates, and merging overlapping events.
+
+#### **2.1 EventController**
+
+**Methods Covered:**
+
+- **`createEvent`:**
+  - Verifies that an event is created successfully.
+  - Ensures `EventService.create` is called with the correct arguments.
+  - Handles invalid `creatorId` and validates error responses.
+
+- **`getEvent`:**
+  - Verifies that an event can be retrieved by ID.
+  - Ensures `EventService.findOne` is called with the correct ID.
+  - Validates the response matches the retrieved event.
+
+- **`getAllEvents`:**
+  - Verifies that all events are retrieved successfully.
+  - Ensures `EventService.findAll` is called.
+
+- **`updateEvent`:**
+  - Verifies that an event can be updated by ID.
+  - Ensures `EventService.update` is called with the correct arguments.
+
+- **`deleteEvent`:**
+  - Verifies that an event can be deleted by ID.
+  - Ensures `EventService.remove` is called with the correct ID.
+
+- **`mergeEventsForUser`:**
+  - Verifies that overlapping events for a user are merged successfully.
+  - Ensures `EventService.mergeAllOverlappingEvents` is called with the correct user ID.
+
+---
+
+#### **2.2 EventService**
+
+**Methods Covered:**
+
+- **`create`:**
+  - Verifies that an event is created and saved in the database.
+  - Ensures `creator` and `invitees` are fetched and validated.
+  - Handles errors for missing `creator` or `invitees`.
+
+- **`findOne`:**
+  - Verifies that an event can be retrieved by ID.
+  - Ensures proper error handling when the event is not found.
+
+- **`findAll`:**
+  - Verifies that all events are retrieved from the database with relations.
+
+- **`update`:**
+  - Verifies that an event is updated successfully by ID.
+  - Ensures proper behavior for updating event data.
+
+- **`remove`:**
+  - Verifies that an event can be deleted by ID.
+  - Ensures proper error handling for non-existent events.
+
+- **`mergeAllOverlappingEvents`:**
+  - Verifies that overlapping events are merged correctly for a user.
+  - Ensures the logic for identifying overlapping events works as expected.
+  - Validates the deletion of original events and saving of merged events.
+
 

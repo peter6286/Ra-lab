@@ -5,7 +5,6 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // This setup makes the title field required at both the database and application layers.
   app.useGlobalPipes(new ValidationPipe());
   
   await app.listen(3000);
