@@ -1,31 +1,28 @@
-# NestJS TypeScript Starter Project
+## Project demo
 
-This project is a NestJS-based API for managing events and users. It includes CRUD operations for tasks (events), functionality for handling event invitees, and a method to merge overlapping events for a user.
+The demo of this project is in Google drive as the link here:
+https://drive.google.com/file/d/1z9TdQuaoYAZiiSBqeUyX7nOqRLCkWd4C/view?usp=sharing
 
-## Requirements
-
-- Node.js (>= 14.x)
-- NPM (>= 6.x)
-- MySQL (ensure you have it installed and running for database connectivity)
 
 ## Getting Started
 
-### 1. Clone the Repository
+### Clone the Repository
 
 ```bash
 git clone https://github.com/peter6286/Ra-lab-master.git
 cd RA-LAB-MASTER
 ```
 
-### 2. Install Dependencies
+## Install Dependencies
 
 Use npm to install the project dependencies:
-
+- Node.js (>= 16.x)
+- MySQL
 ```bash
 npm install
 ```
 
-### 3. Configure Database
+## Configure Database
 
 Make sure your MySQL database is set up. Update the database configuration in `app.module.ts` or set up environment variables for your MySQL database.
 
@@ -44,7 +41,7 @@ TypeOrmModule.forRoot({
 }),
 ```
 
-### 4. Running the Application
+## Running the Application
 
 To start the application, use one of the following commands:
 
@@ -65,15 +62,11 @@ To start the application, use one of the following commands:
 
  Once started, the server will run at `http://localhost:3000` by default. You can access API endpoints using this URL.
 
-## Testing
+ ### **Testing the Endpoints**
 
-### 1. Run Tests
+Use a tool like `Postman` to test the endpoints manually.
 
-To run the automated tests and ensure everything works as expected:
 
-```bash
-npm test
-```
 
 ## **API Endpoints**
 
@@ -98,12 +91,21 @@ The main endpoints of the API are as follows:
 
 ---
 
-### **Testing the Endpoints**
 
-Use a tool like `Postman` to test the endpoints manually.
 
-## Test case cover
 
+
+## Testing
+
+### Run Tests
+
+To run the automated tests and ensure everything works as expected:
+
+```bash
+npm test
+```
+
+### Test case cover
 ### **1. User Module**
 
 The `User` module manages operations related to users, such as creation, retrieval, and deletion.
@@ -173,7 +175,6 @@ The `Event` module manages event-related operations, such as creation, updates, 
   - Ensures `EventService.mergeAllOverlappingEvents` is called with the correct user ID.
 
 ---
-
 #### **2.2 EventService**
 
 **Methods Covered:**
@@ -202,5 +203,3 @@ The `Event` module manages event-related operations, such as creation, updates, 
   - Verifies that overlapping events are merged correctly for a user.
   - Ensures the logic for identifying overlapping events works as expected.
   - Validates the deletion of original events and saving of merged events.
-
-
